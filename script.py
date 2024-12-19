@@ -30,15 +30,22 @@ def process_csv(filename):
             for review in reviews:
                 # Perform sentiment analysis for each review
                 aspect_sentiments = sentiment_analysis_aspects(review)
-                
-                # Flatten the aspect-sentiment dictionary
-                aspects = ', '.join(aspect_sentiments.keys())
-                sentiments = ', '.join(aspect_sentiments.values())
+
+                overall_sentiment = TBsentiment(review)
                 
                 # Write the date, review, aspects, and sentiments as a row
-                writer.writerow([date, review, aspects, sentiments])
+                writer.writerow([date, review, aspect_sentiments, overall_sentiment])
 
     return output_file
+
+def TBsentiment(review):
+    analysis = TextBlob(review)
+    if analysis.sentiment.polarity > 0:
+        return 'positive'  # Positive sentiment
+    elif analysis.sentiment.polarity < 0:
+        return 'negative'  # Negative sentiment
+    else:
+        return 'neutral'  # Neutral sentiment
 
 import pandas as pd
 import spacy
