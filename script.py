@@ -23,14 +23,20 @@ def process_csv(filename):
     os.makedirs('output', exist_ok=True)  # Ensure the output directory exists
     with open(os.path.join('output', output_file), 'w') as f:
         writer = csv.writer(f)
-        writer.writerow(['date', 'review', 'sentiment'])  # Updated header
+        # Write header with aspects and sentiment included
+        writer.writerow(['date', 'review', 'aspects', 'sentiments'])
 
         for date, reviews in date_reviews.items():
             for review in reviews:
                 # Perform sentiment analysis for each review
-                sentiment = sentiment_analysis_aspects(review)
-                # Write the date, review, and sentiment analysis result as a row
-                writer.writerow([date, review, sentiment])
+                aspect_sentiments = sentiment_analysis_aspects(review)
+                
+                # Flatten the aspect-sentiment dictionary
+                aspects = ', '.join(aspect_sentiments.keys())
+                sentiments = ', '.join(aspect_sentiments.values())
+                
+                # Write the date, review, aspects, and sentiments as a row
+                writer.writerow([date, review, aspects, sentiments])
 
     return output_file
 
