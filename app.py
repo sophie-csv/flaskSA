@@ -3,8 +3,9 @@ import os
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from script import process_csv
+from script import process_csv, positive_word_cloud
 app = Flask(__name__)
+
 
 ALLOWED_EXTENSIONS = set(['csv'])
 
@@ -19,11 +20,12 @@ def upload():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            new_filename = f'{filename.split(".")[0]}_{str(datetime.now())}.csv'
+            new_filename = f'{filename.split(".")[0]}_{str(datetime.now().date())}.csv'
             save_location = os.path.join('input', new_filename)
             file.save(save_location)
 
             output_file = process_csv(save_location)
+
             #return send_from_directory('output', output_file)
             return redirect(url_for('download'))
 
@@ -37,6 +39,26 @@ def download():
 @app.route('/download/<filename>')
 def download_file(filename):
     return send_from_directory('output', filename)
+
+@app.route('/download/positive_wordcloud')
+def download_positive_word_cloud():
+    pos_wc = positive_word_cloud()
+    return send_from_directory('output/media', pos_wc)
+
+
+# ONLY WORKS WHEN YOU TERMINATE WITH CONTROL + C 
+import atexit
+
+def remove(directory_path):
+    for item in os.listdir(directory_path):
+        item_path = os.path.join(directory_path, item)
+        if not os.path.isdir(item_path):
+            os.remove(item_path)
+        else:
+            remove(item_path)
+
+atexit.register(lambda: remove('input'))
+atexit.register(lambda: remove('output'))
 
 
 if __name__ == '__main__':
