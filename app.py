@@ -13,7 +13,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         file = request.files['file']

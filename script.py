@@ -4,39 +4,25 @@ from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
 
+
 def process_csv(filename):
-    # Create a dictionary to group reviews by date
-    date_reviews = defaultdict(list)
+    df = pd.read_csv(filename)
+    df = df.dropna(subset=["review"])
+    df['aspects_sentiment'] = df['review'].apply(sentiment_analysis_aspects)
+    df['overall_sentiment'] = df['review'].apply(TBsentiment)
 
-    with open(filename, 'r') as f:
-        reader = csv.DictReader(f)
+    base_filename = os.path.splitext(os.path.basename(filename))[0]
 
-        for row in reader:
-            # Extract date and review from the CSV
-            date = row['date']
-            review = row['review']
-            
-            # Group reviews by date
-            date_reviews[date].append(review)
+    # Create the new output file name by appending '_with_sentiments'
+    output_filename = f'{base_filename}_with_sentiments.csv'
 
-    output_file = f'date_reviews_{str(datetime.now())}.csv'
-    os.makedirs('output', exist_ok=True)  # Ensure the output directory exists
-    with open(os.path.join('output', output_file), 'w') as f:
-        writer = csv.writer(f)
-        # Write header with aspects and sentiment included
-        writer.writerow(['date', 'review', 'aspects', 'sentiments'])
+    # Define the output path for saving the processed CSV
+    output_path = os.path.join('output', output_filename)
 
-        for date, reviews in date_reviews.items():
-            for review in reviews:
-                # Perform sentiment analysis for each review
-                aspect_sentiments = sentiment_analysis_aspects(review)
+    # Save the processed DataFrame as a new CSV file
+    df.to_csv(output_path, index=False)
 
-                overall_sentiment = TBsentiment(review)
-                
-                # Write the date, review, aspects, and sentiments as a row
-                writer.writerow([date, review, aspect_sentiments, overall_sentiment])
-
-    return output_file
+    return output_filename
 
 def TBsentiment(review):
     analysis = TextBlob(review)

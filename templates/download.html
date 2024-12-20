@@ -1,5 +1,5 @@
 <h1> Sucessfully Uploaded!</h1>
-<h3> Here is the file with sentiemnt attatched: </h3>
+<h3> Here is the file with sentiment values attatched: </h3>
 
 {% for filename in files %}
 <a href="{{ url_for('download_file', filename=filename) }}">{{ filename }}</a><br />
