@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from script import process_csv, positive_word_cloud
+from script import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph
 app = Flask(__name__)
 
 
@@ -43,7 +43,17 @@ def download_file(filename):
 @app.route('/download/positive_wordcloud')
 def download_positive_word_cloud():
     pos_wc = positive_word_cloud()
-    return send_from_directory('output/media', pos_wc)
+    return send_from_directory('output', pos_wc, as_attachment=True)
+
+@app.route('/download/negative_wordcloud')
+def download_negative_word_cloud():
+    neg_wc = negative_word_cloud()
+    return send_from_directory('output', neg_wc, as_attachment=True)
+
+@app.route('/download/positive_frequency_graph')
+def download_positive_frequency_graph():
+    pfg = positive_frequency_graph()
+    return send_from_directory('output', pfg, as_attachment=True)
 
 
 # ONLY WORKS WHEN YOU TERMINATE WITH CONTROL + C 
@@ -62,4 +72,4 @@ atexit.register(lambda: remove('output'))
 
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)
