@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from script import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph
+from script import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph, negative_frequency_graph
 app = Flask(__name__)
 
 
@@ -31,6 +31,24 @@ def upload():
 
     return render_template('upload.html')
 
+import zipfile
+from flask import send_file
+
+@app.route('/download_all')
+def download_all():
+    # Name of the zip file
+    zip_filename = 'output_files.zip'
+    zip_filepath = os.path.join('zip_file', zip_filename)
+    
+    # Create a zip file containing all files from the 'output' directory
+    with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk('zip_file'):
+            for file in files:
+                zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), 'zip_file'))
+    
+    # Serve the zip file for download
+    return send_file(zip_filepath, as_attachment=True)
+
 
 @app.route('/download')
 def download():
@@ -53,6 +71,11 @@ def download_negative_word_cloud():
 @app.route('/download/positive_frequency_graph')
 def download_positive_frequency_graph():
     pfg = positive_frequency_graph()
+    return send_from_directory('output', pfg, as_attachment=True)
+
+@app.route('/download/negative_frequency_graph')
+def download_negative_frequency_graph():
+    pfg = negative_frequency_graph()
     return send_from_directory('output', pfg, as_attachment=True)
 
 

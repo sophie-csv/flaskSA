@@ -125,7 +125,7 @@ def positive_frequency_graph():
     # Display the 20 most common words using a bar plot also include hot to cold color map
     fig, ax = plt.subplots(figsize=(20, 5))
     plt.bar(df_word_freq['Word'].head(20), df_word_freq['Frequency'].head(20), color=plt.cm.coolwarm(df_word_freq['Frequency'].head(20) / df_word_freq['Frequency'].head(20).max()))
-    ax.set(title='Top 20 Most Common Words in Negative Reviews', xlabel='Word', ylabel='Frequency')
+    ax.set(title='Top 20 Most Common Words in Positive Reviews', xlabel='Word', ylabel='Frequency')
     #add the frequency on top of each bar
     for i, freq in enumerate(df_word_freq.head(20)['Frequency']):
         ax.text(i, freq, str(freq), ha='center', va='bottom')
@@ -154,9 +154,44 @@ def negative_word_cloud():
     plt.title('Negative Sentiment Reviews Word Cloud', fontsize=20,fontweight='bold')
     plt.show()
 
-# NO TITLE FOR SOME REASON 
+    # NO TITLE FOR SOME REASON
+    
     wordcloud_image_path = os.path.join('output', new_file_name)
     plt.savefig(wordcloud_image_path)
     wordcloud.to_file(wordcloud_image_path)
+
+    return new_file_name
+
+def negative_frequency_graph():
+    global file
+    base_name = os.path.splitext(os.path.basename(file))[0]
+    new_file_name = f"{base_name}_negative_frequency_graph.png"
+    data = pd.read_csv(file)
+
+    negative = data[data['overall_sentiment'] == 'negative']
+    negative_text = ' '.join(negative['review'].tolist())
+    negative_text = negative_text.translate(str.maketrans('', '', string.punctuation))
+    negative_text = ' '.join([word for word in negative_text.split() if word.lower()])
+
+        # Count word frequencies
+    word_freq = Counter(negative_text.split())
+
+    # Create a DataFrame from the word frequency
+    df_word_freq = pd.DataFrame(word_freq.items(), columns=['Word', 'Frequency'])
+
+    # Sort the DataFrame by word frequency
+    df_word_freq = df_word_freq.sort_values(by='Frequency', ascending=False)
+
+    # Display the 20 most common words using a bar plot also include hot to cold color map
+    fig, ax = plt.subplots(figsize=(20, 5))
+    plt.bar(df_word_freq['Word'].head(20), df_word_freq['Frequency'].head(20), color=plt.cm.coolwarm(df_word_freq['Frequency'].head(20) / df_word_freq['Frequency'].head(20).max()))
+    ax.set(title='Top 20 Most Common Words in Negative Reviews', xlabel='Word', ylabel='Frequency')
+    #add the frequency on top of each bar
+    for i, freq in enumerate(df_word_freq.head(20)['Frequency']):
+        ax.text(i, freq, str(freq), ha='center', va='bottom')
+    plt.show()
+
+    image_path = os.path.join('output', new_file_name)
+    plt.savefig(image_path)
 
     return new_file_name

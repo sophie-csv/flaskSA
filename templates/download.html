@@ -13,6 +13,11 @@
     <a href="{{ url_for('download_file', filename=filename) }}" download>{{ filename }}</a><br />
     {% endfor %}
 
+    <h1>Download All Files</h1>
+    <form action="{{ url_for('download_all') }}" method="get">
+        <button type="submit">Download All Files</button>
+    </form>
+
     <h1>Download the Positive Sentiment WordCloud</h1>
     <img src="{{ url_for('download_positive_word_cloud') }}" alt="Positive Sentiment Word Cloud">
 
@@ -29,6 +34,12 @@
     <h1>Download the Positive Frequency Graph</h1>
     <img src="{{ url_for('download_positive_frequency_graph') }}" alt="Positive Frequency Graph">
     <form action="{{ url_for('download_positive_frequency_graph') }}" method="get">
+        <button type="submit">Download Frequency Graph Image</button>
+    </form>
+
+    <h1>Download the Negative Frequency Graph</h1>
+    <img src="{{ url_for('download_negative_frequency_graph') }}" alt="Negative Frequency Graph">
+    <form action="{{ url_for('download_negative_frequency_graph') }}" method="get">
         <button type="submit">Download Frequency Graph Image</button>
     </form>
 </body>
