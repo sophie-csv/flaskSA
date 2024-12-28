@@ -83,12 +83,11 @@ def positive_word_cloud():
     base_name = os.path.splitext(os.path.basename(file))[0]
     new_file_name = f"{base_name}_positive_wordcloud.png"
     data = pd.read_csv(file)
-
+    
     positive = data[data['overall_sentiment'] == 'positive']
     positive_text = ' '.join(positive['review'].tolist())
-    positive_text = positive_text.translate(str.maketrans('', '', string.punctuation))
-    positive_text = ' '.join([word for word in positive_text.split() if word.lower()])
     wordcloud = WordCloud(width=800, height=400, background_color ='white').generate(positive_text)
+    
 
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
@@ -144,8 +143,6 @@ def negative_word_cloud():
 
     negative = data[data['overall_sentiment'] == 'negative']
     negative_text = ' '.join(negative['review'].tolist())
-    negative_text = negative_text.translate(str.maketrans('', '', string.punctuation))
-    negative_text = ' '.join([word for word in negative_text.split() if word.lower()])
     wordcloud = WordCloud(width=800, height=400, background_color ='white').generate(negative_text)
 
     plt.figure(figsize=(10, 5))
@@ -154,7 +151,6 @@ def negative_word_cloud():
     plt.title('Negative Sentiment Reviews Word Cloud', fontsize=20,fontweight='bold')
     plt.show()
 
-    # NO TITLE FOR SOME REASON
     
     wordcloud_image_path = os.path.join('output', new_file_name)
     plt.savefig(wordcloud_image_path)

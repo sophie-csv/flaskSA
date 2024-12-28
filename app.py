@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from script import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph, negative_frequency_graph
+from regular import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph, negative_frequency_graph
 app = Flask(__name__)
 
 
@@ -13,6 +13,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+# in upload create radioboxes
+# create a routing function that reroutes based on aspect selection/not. 
 
 @app.route('/', methods=['GET', 'POST'])
 def upload():
