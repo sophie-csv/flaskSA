@@ -4,6 +4,7 @@ from flask import Flask, request, render_template, redirect, url_for, send_from_
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from regular import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph, negative_frequency_graph
+from custom import process_aspect_csv, density_plot, box_plot
 app = Flask(__name__)
 
 
@@ -27,15 +28,33 @@ def upload():
             save_location = os.path.join('input', new_filename)
             file.save(save_location)
 
-            output_file = process_csv(save_location)
-
+            if 'nouns' in request.form and request.form['nouns'] == 'on':
+                output_file = process_aspect_csv(save_location)
+                return redirect(url_for('aspect_download'))
+            else:
+                output_file = process_csv(save_location)
             #return send_from_directory('output', output_file)
-            return redirect(url_for('download'))
+                return redirect(url_for('download'))
 
     return render_template('upload.html')
 
 import zipfile
 from flask import send_file
+
+@app.route('/aspect_download', methods=['GET'])
+def aspect_download():
+    # Logic for handling aspect_download
+    return render_template('aspect_download.html')
+
+@app.route('/aspect_download/density')
+def plot_density():
+    density = density_plot()
+    return send_from_directory('output', density, as_attachment=True)
+
+@app.route('/aspect_download/boxplot')
+def plot_boxplot():
+    box_plot_image = box_plot()
+    return send_from_directory('output', box_plot_image, as_attachment=True)
 
 @app.route('/download_all')
 def download_all():

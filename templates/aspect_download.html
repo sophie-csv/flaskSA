@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Files</title>
+</head>
+<body>
+    <h1>Successfully Uploaded!</h1>
+    <h3>Here is the file with sentiment values attached:</h3>
+
+    <!-- Density Plot Section -->
+    <h3>Density Plot</h3>
+    <img src="{{ url_for('plot_density') }}" alt="Density Plot">
+    <br><br>
+    <form action="{{ url_for('plot_density') }}" method="get">
+        <button type="submit">Download Density Plot</button>
+    </form>
+
+    <hr> <!-- Adds a horizontal line between sections -->
+
+    <!-- Box Plot Section -->
+    <h3>Sentiment Distribution Box Plot</h3>
+    <img src="{{ url_for('plot_boxplot') }}" alt="Sentiment Distribution Box Plot">
+    <br><br>
+    <form action="{{ url_for('plot_boxplot') }}" method="get">
+        <button type="submit">Download Box Plot</button>
+    </form>
+</body>
+</html>
