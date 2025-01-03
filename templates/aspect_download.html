@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,5 +27,32 @@
     <form action="{{ url_for('plot_boxplot') }}" method="get">
         <button type="submit">Download Box Plot</button>
     </form>
+
+    <hr> <!-- Adds a horizontal line between sections -->
+
+    <!-- Correlational Plot Section -->
+    <h3>Sentiment Distribution Correlational Plot</h3>
+    <img src="{{ url_for('plot_correlational') }}" alt="Sentiment Distribution Correlational Plot">
+    <br><br>
+    <form action="{{ url_for('plot_correlational') }}" method="get">
+        <button type="submit">Download Correlational Plot</button>
+    </form>
+
+    <h3>Positive Word Cloud</h3>
+    <img src="{{ url_for('plot_pos_wc') }}" alt="Positive Word Cloud">
+    <br><br>
+    <form action="{{ url_for('plot_pos_wc') }}" method="get">
+        <button type="submit">Download Positive Word Cloud</button>
+    </form>
+
+    <h3>Negative Word Cloud</h3>
+    <img src="{{ url_for('plot_neg_wc') }}" alt="Negative Word Cloud">
+    <br><br>
+    <form action="{{ url_for('plot_neg_wc') }}" method="get">
+        <button type="submit">Download Negative Word Cloud</button>
+    </form>
+
 </body>
 </html>
+
+

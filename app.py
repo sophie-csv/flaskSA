@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, redirect, url_for, send_from_
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from regular import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph, negative_frequency_graph
-from custom import process_aspect_csv, density_plot, box_plot
+from custom import process_aspect_csv, density_plot, box_plot, correlation, pos_wordcloud, neg_wordcloud
 app = Flask(__name__)
 
 
@@ -41,6 +41,9 @@ def upload():
 import zipfile
 from flask import send_file
 
+# <---------------- ABSA ROUTES --------------------->
+# downloads the correct graph, but displays the wrong one?
+
 @app.route('/aspect_download', methods=['GET'])
 def aspect_download():
     # Logic for handling aspect_download
@@ -55,6 +58,25 @@ def plot_density():
 def plot_boxplot():
     box_plot_image = box_plot()
     return send_from_directory('output', box_plot_image, as_attachment=True)
+
+@app.route('/aspect_download/correlational')
+def plot_correlational():
+    corr = correlation()
+    return send_from_directory('output', corr, as_attachment=True)
+
+@app.route('/aspect_download/positivewordcloud')
+def plot_pos_wc():
+    pwc = pos_wordcloud()
+    return send_from_directory('output', pwc, as_attachment=True)
+
+@app.route('/aspect_download/negativewordcloud')
+def plot_neg_wc():
+    nwc = neg_wordcloud()
+    return send_from_directory('output', nwc, as_attachment=True)
+
+
+# <---------------- ABSA ROUTES --------------------->
+
 
 @app.route('/download_all')
 def download_all():
