@@ -4,10 +4,22 @@ from flask import Flask, request, render_template, redirect, url_for, send_from_
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from regular import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph, negative_frequency_graph
-from custom import process_aspect_csv, density_plot, box_plot, correlation, pos_wordcloud, neg_wordcloud
+from custom import process_aspect_csv, density_plot, box_plot, correlation, wordclouds
 app = Flask(__name__)
 
-
+aspects = {
+    "food": ["food", "taste", "flavor", "fries", "burger", "mac", "cheese", "salmon", "veggies", "chips", 
+             "prepared", "pastry", "bread", "dessert", "meal", "dish", "menu", "portion", "delicious", 
+             "fresh", "horrible", "old", "runny", "rosemary"],
+    "service": ["service", "staff", "waiter", "waitress", "host", "manager", "employee", "friendly", 
+                "courteous", "dedicated", "Amanda", "Jen", "seated", "kind", "treat", "welcome", 
+                "helpful", "attentive", "slow", "rude"],
+    "ambience": ["ambience", "atmosphere", "decor", "environment", "setting", "comfortable", 
+                 "cozy", "noisy", "quiet", "clean", "music", "place", "vibe", "feel", "space"],
+    "price": ["price", "cost", "expensive", "cheap", "value", "worth", "overpriced", "affordable", 
+              "reasonable", "portion", "deal", "charges", "pricing"]
+}
+ 
 ALLOWED_EXTENSIONS = set(['csv'])
 
 def allowed_file(filename):
@@ -46,8 +58,20 @@ from flask import send_file
 
 @app.route('/aspect_download', methods=['GET'])
 def aspect_download():
+    aspects = {
+    "food": ["food", "taste", "flavor", "fries", "burger", "mac", "cheese", "salmon", "veggies", "chips", 
+             "prepared", "pastry", "bread", "dessert", "meal", "dish", "menu", "portion", "delicious", 
+             "fresh", "horrible", "old", "runny", "rosemary"],
+    "service": ["service", "staff", "waiter", "waitress", "host", "manager", "employee", "friendly", 
+                "courteous", "dedicated", "Amanda", "Jen", "seated", "kind", "treat", "welcome", 
+                "helpful", "attentive", "slow", "rude"],
+    "ambience": ["ambience", "atmosphere", "decor", "environment", "setting", "comfortable", 
+                 "cozy", "noisy", "quiet", "clean", "music", "place", "vibe", "feel", "space"],
+    "price": ["price", "cost", "expensive", "cheap", "value", "worth", "overpriced", "affordable", 
+              "reasonable", "portion", "deal", "charges", "pricing"]
+}
     # Logic for handling aspect_download
-    return render_template('aspect_download.html')
+    return render_template('aspect_download.html', aspects=aspects)
 
 @app.route('/aspect_download/density')
 def plot_density():
@@ -64,15 +88,29 @@ def plot_correlational():
     corr = correlation()
     return send_from_directory('output', corr, as_attachment=True)
 
-@app.route('/aspect_download/positivewordcloud')
-def plot_pos_wc():
-    pwc = pos_wordcloud()
-    return send_from_directory('output', pwc, as_attachment=True)
+@app.route('/aspect_download/<aspect_type>/<wordcloud_type>')
+def plot_wordcloud(aspect_type, wordcloud_type):
+    # Validate the aspect type and wordcloud type
+    if aspect_type not in aspects:
+        return "Aspect not found!", 404
 
-@app.route('/aspect_download/negativewordcloud')
-def plot_neg_wc():
-    nwc = neg_wordcloud()
-    return send_from_directory('output', nwc, as_attachment=True)
+    if wordcloud_type not in ['positivewordcloud', 'negativewordcloud']:
+        return "Wordcloud type not found!", 404
+
+    pos_files, neg_files = wordclouds()  # Generate wordclouds
+
+    # Determine which file to send based on the wordcloud type and aspect type
+    if wordcloud_type == 'positivewordcloud':
+        # Find the positive wordcloud for the given aspect
+        filename = next((f for f in pos_files if aspect_type in f), None)
+    elif wordcloud_type == 'negativewordcloud':
+        # Find the negative wordcloud for the given aspect
+        filename = next((f for f in neg_files if aspect_type in f), None)
+
+    if filename:
+        return send_from_directory('wordclouds', filename, as_attachment=True)
+    else:
+        return "File not found for the given aspect and wordcloud type.", 404
 
 
 # <---------------- ABSA ROUTES --------------------->

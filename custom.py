@@ -217,7 +217,7 @@ def generate_wordcloud(words, title, colormap):
         plt.title(title)
         plt.axis("off")
 
-def pos_wordcloud():
+def wordclouds():
     global file
     data = pd.read_csv(file)
     data = data.dropna(subset=['review'])  # Ensure 'review' column exists in 'data'
@@ -235,65 +235,39 @@ def pos_wordcloud():
     
     aspect_df['compound'] = aspect_df['polarity']
 
-    # Loop through aspects and generate word clouds for positive polarity
-    for aspect in aspects.keys():  # Assuming 'aspects' is a dictionary or structure with aspect keys
-        # Gather positive words from the 'review' column for each aspect where 'compound' > 0
+    # This function will generate wordclouds for all aspects, positive and negative
+    pos_files = []
+    neg_files = []
+
+    # Loop through aspects and generate word clouds for positive and negative polarity
+    for aspect in aspects.keys():
         positive_words = " ".join(
             word for text in aspect_df[(aspect_df['aspect'] == aspect) & (aspect_df['compound'] > 0)]['review']
             if isinstance(text, str)  # Add this check to ensure text is a string
             for word in text.split()
         )
-        
-        # Generate word cloud for each aspect
-        generate_wordcloud(positive_words, f"Positive Word Cloud for {aspect.capitalize()}", 'Blues')
-
-        # Update the filename to include the aspect name for separate files
-        new_file_name = f"{base_name}_positive_wordcloud_{aspect}.png"
-        
-        # After generating word cloud, save the image
-        image_path = os.path.join('output', new_file_name)
-        plt.savefig(image_path)
-        plt.close()  # Close the plot after saving to avoid overlapping plots
-
-    return new_file_name
-
-
-def neg_wordcloud():
-    global file
-    data = pd.read_csv(file)
-    data = data.dropna(subset=['review'])  # Ensure 'review' column exists in 'data'
-    base_name = os.path.splitext(os.path.basename(file))[0]
-
-    # Process the data to extract aspects (assuming 'extract_aspect_data' is working correctly)
-    aspect_df = extract_aspect_data(data)
-    
-    # Check if the aspect_df and data have a common column (e.g., 'id') to merge on
-    if 'id' in aspect_df.columns and 'id' in data.columns:
-        aspect_df = aspect_df.merge(data[['id', 'review']], on='id', how='left')
-    else:
-        # If no 'id' column, try joining based on the index
-        aspect_df['review'] = data['review']
-    
-    aspect_df['compound'] = aspect_df['polarity']
-
-    # Loop through aspects and generate word clouds for positive polarity
-    for aspect in aspects.keys():  # Assuming 'aspects' is a dictionary or structure with aspect keys
-        # Gather positive words from the 'review' column for each aspect where 'compound' > 0
         negative_words = " ".join(
             word for text in aspect_df[(aspect_df['aspect'] == aspect) & (aspect_df['compound'] < 0)]['review']
             if isinstance(text, str)  # Add this check to ensure text is a string
             for word in text.split()
         )
-        
-        # Generate word cloud for each aspect
+
+        # Generate positive word cloud
+        generate_wordcloud(positive_words, f"Positive Word Cloud for {aspect.capitalize()}", 'Blues')
+        pos_file = f"{base_name}_positive_wordcloud_{aspect}.png"
+        image_path_pos = os.path.join('wordclouds', pos_file)
+        plt.savefig(image_path_pos)
+        plt.close()
+
+        # Generate negative word cloud
         generate_wordcloud(negative_words, f"Negative Word Cloud for {aspect.capitalize()}", 'Reds')
+        neg_file = f"{base_name}_negative_wordcloud_{aspect}.png"
+        image_path_neg = os.path.join('wordclouds', neg_file)
+        plt.savefig(image_path_neg)
+        plt.close()
 
-        # Update the filename to include the aspect name for separate files
-        new_file_name = f"{base_name}_negative_wordcloud_{aspect}.png"
-        
-        # After generating word cloud, save the image
-        image_path = os.path.join('output', new_file_name)
-        plt.savefig(image_path)
-        plt.close()  # Close the plot after saving to avoid overlapping plots
+        # Store the filenames
+        pos_files.append(pos_file)
+        neg_files.append(neg_file)
 
-    return new_file_name
+    return pos_files, neg_files

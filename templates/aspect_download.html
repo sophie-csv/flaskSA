@@ -38,19 +38,17 @@
         <button type="submit">Download Correlational Plot</button>
     </form>
 
-    <h3>Positive Word Cloud</h3>
-    <img src="{{ url_for('plot_pos_wc') }}" alt="Positive Word Cloud">
-    <br><br>
-    <form action="{{ url_for('plot_pos_wc') }}" method="get">
-        <button type="submit">Download Positive Word Cloud</button>
-    </form>
-
-    <h3>Negative Word Cloud</h3>
-    <img src="{{ url_for('plot_neg_wc') }}" alt="Negative Word Cloud">
-    <br><br>
-    <form action="{{ url_for('plot_neg_wc') }}" method="get">
-        <button type="submit">Download Negative Word Cloud</button>
-    </form>
+    <h2>Select an Aspect</h2>
+    <ul>
+        <!-- Dynamically render list of aspects -->
+        {% for aspect in aspects.keys() %}
+            <li>
+                <h3>{{ aspect.capitalize() }}</h3>
+                <button onclick="window.location.href='/aspect_download/{{ aspect }}/positivewordcloud'">Download Positive Wordcloud</button>
+                <button onclick="window.location.href='/aspect_download/{{ aspect }}/negativewordcloud'">Download Negative Wordcloud</button>
+            </li>
+        {% endfor %}
+    </ul>
 
 </body>
 </html>
