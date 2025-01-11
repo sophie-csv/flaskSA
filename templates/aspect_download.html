@@ -1,56 +1,132 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #333333;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #cccccc;
+            margin: 20px 0;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+        }
+
+        form, button {
+            text-align: center;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        li h3 {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Successfully Uploaded!</h1>
-    <h3>Here is the file with sentiment values attached:</h3>
+    <div class="container">
+        <h1>Successfully Uploaded!</h1>
+        <h3>Here is the file with sentiment values attached:</h3>
 
-    <!-- Density Plot Section -->
-    <h3>Density Plot</h3>
-    <img src="{{ url_for('plot_density') }}" alt="Density Plot">
-    <br><br>
-    <form action="{{ url_for('plot_density') }}" method="get">
-        <button type="submit">Download Density Plot</button>
-    </form>
+        <!-- Density Plot Section -->
+        <h3>Density Plot</h3>
+        <img src="{{ url_for('plot_density') }}" alt="Density Plot">
+        <form action="{{ url_for('plot_density') }}" method="get">
+            <button type="submit">Download Density Plot</button>
+        </form>
 
-    <hr> <!-- Adds a horizontal line between sections -->
+        <hr>
 
-    <!-- Box Plot Section -->
-    <h3>Sentiment Distribution Box Plot</h3>
-    <img src="{{ url_for('plot_boxplot') }}" alt="Sentiment Distribution Box Plot">
-    <br><br>
-    <form action="{{ url_for('plot_boxplot') }}" method="get">
-        <button type="submit">Download Box Plot</button>
-    </form>
+        <!-- Box Plot Section -->
+        <h3>Sentiment Distribution Box Plot</h3>
+        <img src="{{ url_for('plot_boxplot') }}" alt="Sentiment Distribution Box Plot">
+        <form action="{{ url_for('plot_boxplot') }}" method="get">
+            <button type="submit">Download Box Plot</button>
+        </form>
 
-    <hr> <!-- Adds a horizontal line between sections -->
+        <hr>
 
-    <!-- Correlational Plot Section -->
-    <h3>Sentiment Distribution Correlational Plot</h3>
-    <img src="{{ url_for('plot_correlational') }}" alt="Sentiment Distribution Correlational Plot">
-    <br><br>
-    <form action="{{ url_for('plot_correlational') }}" method="get">
-        <button type="submit">Download Correlational Plot</button>
-    </form>
+        <!-- Correlational Plot Section -->
+        <h3>Sentiment Distribution Correlational Plot</h3>
+        <img src="{{ url_for('plot_correlational') }}" alt="Sentiment Distribution Correlational Plot">
+        <form action="{{ url_for('plot_correlational') }}" method="get">
+            <button type="submit">Download Correlational Plot</button>
+        </form>
 
-    <h2>Select an Aspect</h2>
-    <ul>
-        <!-- Dynamically render list of aspects -->
-        {% for aspect in aspects.keys() %}
+        <hr>
+
+        <h2>Select an Aspect</h2>
+        <ul>
+            <!-- Dynamically render list of aspects -->
+            {% for aspect in aspects.keys() %}
             <li>
                 <h3>{{ aspect.capitalize() }}</h3>
-                <button onclick="window.location.href='/aspect_download/{{ aspect }}/positivewordcloud'">Download Positive Wordcloud</button>
-                <button onclick="window.location.href='/aspect_download/{{ aspect }}/negativewordcloud'">Download Negative Wordcloud</button>
+                <button onclick="window.location.href='/aspect_download/{{ aspect }}/positivewordcloud'">
+                    Download Positive Wordcloud
+                </button>
+                <button onclick="window.location.href='/aspect_download/{{ aspect }}/negativewordcloud'">
+                    Download Negative Wordcloud
+                </button>
             </li>
-        {% endfor %}
-    </ul>
-
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
-
-

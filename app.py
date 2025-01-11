@@ -40,10 +40,11 @@ def upload():
             save_location = os.path.join('input', new_filename)
             file.save(save_location)
 
-            if 'nouns' in request.form and request.form['nouns'] == 'on':
+            type_selected = request.form.get('type')
+            if type_selected == 'ABSA':
                 output_file = process_aspect_csv(save_location)
                 return redirect(url_for('aspect_download'))
-            else:
+            elif type_selected == 'Basic':
                 output_file = process_csv(save_location)
             #return send_from_directory('output', output_file)
                 return redirect(url_for('download'))

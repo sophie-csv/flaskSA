@@ -1,11 +1,101 @@
-<form action="/" method="POST" enctype="multipart/form-data">
-    <label for="file">File:</label>
-    <input type="file" id="file" name="file"> <br>
-    <button>Upload</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    <div>
-        <input type="radio" id="nouns" name="nouns" value="on">
-        <label for="nouns">Redirect to Aspect Download</label>
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-container h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+
+        .form-container p {
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            color: #666666;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-container input[type="file"] {
+            margin-bottom: 15px;
+        }
+
+        .form-container div {
+            margin-top: 15px;
+        }
+
+        .form-container button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-container input[type="radio"] {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>File Upload</h1>
+        <p>Please follow the rules below before uploading your file:</p>
+        <ul style="text-align: left; font-size: 0.9em; color: #666666;">
+            <li>Ensure the file is under 10MB.</li>
+            <li>Only upload files with .CSV.</li>
+            <li> Please change the comment column to be "review". </li>
+        </ul>
+
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <label for="file">Select File:</label>
+            <input type="file" id="file" name="file" required> 
+        
+            <input type="radio" id="ABSA" name="type" value="ABSA">
+            <label for="ABSA">Aspect Based Sentiment Analysis</label>
+            
+            <input type="radio" id="Basic" name="type" value="Basic">
+            <label for="Basic">Sentiment Analysis</label>
+        
+            <button type="submit">Upload</button>
+        </form>
+        
+
+        </a>
     </div>
-    
-</form>
+</body>
+</html>

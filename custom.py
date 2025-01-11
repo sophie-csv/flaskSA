@@ -135,7 +135,6 @@ def density_plot():
     plt.xlim(-1, 1)
     plt.axvline(0, linestyle="--", color="black", alpha=0.6)
     plt.legend(title="Aspect")
-    plt.show()
 
     image_path = os.path.join('output', new_file_name)
     plt.savefig(image_path)
@@ -154,13 +153,12 @@ def box_plot():
     data['compound'] = data['polarity']
     
     plt.figure(figsize=(10, 6))
-    sns.boxplot(data=data, x="aspect", y="compound", palette="Set3")
+    sns.boxplot(data=data, x="aspect", y="compound", hue="aspect", palette="Set3", legend=False)
     plt.title("Sentiment Score Distribution by Aspect")
     plt.xlabel("Aspect")
     plt.ylabel("Compound Sentiment Score")
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
-    plt.show()
 
     image_path = os.path.join('output', new_file_name)
     plt.savefig(image_path)
@@ -200,7 +198,6 @@ def correlation():
     plt.text(0.05, 0.95, f'Correlation Coefficient: {corr_coefficient:.2f}', 
          transform=plt.gca().transAxes, fontsize=14, verticalalignment='top', horizontalalignment='left',
          bbox=dict(facecolor='white', alpha=0.6, edgecolor='black', boxstyle='round,pad=1'))
-    plt.show()
 
     image_path = os.path.join('output', new_file_name)
     plt.savefig(image_path)
