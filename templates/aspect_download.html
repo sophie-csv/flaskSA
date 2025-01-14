@@ -87,16 +87,15 @@
 
         <!-- Density Plot Section -->
         <h3>Density Plot</h3>
-        <img src="{{ url_for('plot_density') }}" alt="Density Plot">
+        <img src="{{ url_for('serve_plot', filename=density_file) }}" alt="Density Plot">
         <form action="{{ url_for('plot_density') }}" method="get">
             <button type="submit">Download Density Plot</button>
         </form>
-
         <hr>
 
         <!-- Box Plot Section -->
         <h3>Sentiment Distribution Box Plot</h3>
-        <img src="{{ url_for('plot_boxplot') }}" alt="Sentiment Distribution Box Plot">
+        <img src="{{ url_for('serve_plot', filename=boxplot_file) }}" alt="Sentiment Distribution Box Plot">
         <form action="{{ url_for('plot_boxplot') }}" method="get">
             <button type="submit">Download Box Plot</button>
         </form>
@@ -105,28 +104,28 @@
 
         <!-- Correlational Plot Section -->
         <h3>Sentiment Distribution Correlational Plot</h3>
-        <img src="{{ url_for('plot_correlational') }}" alt="Sentiment Distribution Correlational Plot">
+        <img src="{{ url_for('serve_plot', filename=correlation_file) }}" alt="Sentiment Distribution Correlational Plot">
         <form action="{{ url_for('plot_correlational') }}" method="get">
             <button type="submit">Download Correlational Plot</button>
         </form>
 
         <hr>
 
-        <h2>Select an Aspect</h2>
-        <ul>
-            <!-- Dynamically render list of aspects -->
-            {% for aspect in aspects.keys() %}
-            <li>
-                <h3>{{ aspect.capitalize() }}</h3>
-                <button onclick="window.location.href='/aspect_download/{{ aspect }}/positivewordcloud'">
-                    Download Positive Wordcloud
-                </button>
-                <button onclick="window.location.href='/aspect_download/{{ aspect }}/negativewordcloud'">
-                    Download Negative Wordcloud
-                </button>
-            </li>
-            {% endfor %}
-        </ul>
+<h2>Wordclouds</h2>
+<ul>
+    {% for filename in wordcloud_files %}
+        {% set aspect = filename.split('_')[-1].split('.')[0] %}
+        <li>
+            <h1>{{ aspect.capitalize() }}</h1>
+            <img src="{{ url_for('serve_wordcloud', filename=filename) }}" alt="{{ filename }}" width="300">
+            <br>
+            <a href="{{ url_for('serve_wordcloud', filename=filename) }}" download="{{ filename }}">
+                Download {{ filename }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
     </div>
 </body>
 </html>

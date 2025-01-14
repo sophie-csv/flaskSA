@@ -4,10 +4,10 @@ from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
 from collections import Counter
-file = ''
+regular_file = ''
 
 def process_csv(filename):
-    global file
+    global regular_file
     df = pd.read_csv(filename)
     df = df.dropna(subset=["review"])
     df['aspects_sentiment'] = df['review'].apply(sentiment_analysis_aspects)
@@ -21,7 +21,7 @@ def process_csv(filename):
     # Define the output path for saving the processed CSV
     output_path = os.path.join('output', output_filename)
 
-    file = output_path
+    regular_file = output_path
     # Save the processed DataFrame as a new CSV file
     df.to_csv(output_path, index=False)
 

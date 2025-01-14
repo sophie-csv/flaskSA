@@ -4,43 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #333333;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #cccccc;
+            margin: 20px 0;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+        }
+
+        form, button {
+            text-align: center;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        li h3 {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Successfully Uploaded!</h1>
-    <h3>Here is the file with sentiment values attached:</h3>
+    <div class="container">
+        <h1>Successfully Uploaded!</h1>
+        <h3>Here is the file with sentiment values attached:</h3>
 
-    {% for filename in files %}
-    <a href="{{ url_for('download_file', filename=filename) }}" download>{{ filename }}</a><br />
-    {% endfor %}
+        <!-- Dynamically render list of files -->
+        {% for filename in files %}
+            <a href="{{ url_for('download_file', filename=filename) }}" download>{{ filename }}</a><br />
+        {% endfor %}
 
-    <h1>Download All Files</h1>
-    <form action="{{ url_for('download_all') }}" method="get">
-        <button type="submit">Download All Files</button>
-    </form>
+        <hr>
 
-    <h1>Download the Positive Sentiment WordCloud</h1>
-    <img src="{{ url_for('download_positive_word_cloud') }}" alt="Positive Sentiment Word Cloud">
+        <h1>Download All Files</h1>
+        <form action="{{ url_for('download_all') }}" method="get">
+            <button type="submit">Download All Files</button>
+        </form>
 
-    <form action="{{ url_for('download_positive_word_cloud') }}" method="get">
-        <button type="submit">Download WordCloud Image</button>
-    </form>
-    
-    <h1>Download the Negative Sentiment WordCloud</h1>
-    <img src="{{ url_for('download_negative_word_cloud') }}" alt="Negative Sentiment Word Cloud">
-    <form action="{{ url_for('download_negative_word_cloud') }}" method="get">
-        <button type="submit">Download WordCloud Image</button>
-    </form>
+        <hr>
 
-    <h1>Download the Positive Frequency Graph</h1>
-    <img src="{{ url_for('download_positive_frequency_graph') }}" alt="Positive Frequency Graph">
-    <form action="{{ url_for('download_positive_frequency_graph') }}" method="get">
-        <button type="submit">Download Frequency Graph Image</button>
-    </form>
+        <h1>Download the Positive Sentiment WordCloud</h1>
+        <img src="{{ url_for('download_positive_word_cloud') }}" alt="Positive Sentiment Word Cloud">
+        <form action="{{ url_for('download_positive_word_cloud') }}" method="get">
+            <button type="submit">Download WordCloud Image</button>
+        </form>
+        
+        <hr>
 
-    <h1>Download the Negative Frequency Graph</h1>
-    <img src="{{ url_for('download_negative_frequency_graph') }}" alt="Negative Frequency Graph">
-    <form action="{{ url_for('download_negative_frequency_graph') }}" method="get">
-        <button type="submit">Download Frequency Graph Image</button>
-    </form>
+        <h1>Download the Negative Sentiment WordCloud</h1>
+        <img src="{{ url_for('download_negative_word_cloud') }}" alt="Negative Sentiment Word Cloud">
+        <form action="{{ url_for('download_negative_word_cloud') }}" method="get">
+            <button type="submit">Download WordCloud Image</button>
+        </form>
+
+        <hr>
+
+        <h1>Download the Positive Frequency Graph</h1>
+        <img src="{{ url_for('download_positive_frequency_graph') }}" alt="Positive Frequency Graph">
+        <form action="{{ url_for('download_positive_frequency_graph') }}" method="get">
+            <button type="submit">Download Frequency Graph Image</button>
+        </form>
+
+        <hr>
+
+        <h1>Download the Negative Frequency Graph</h1>
+        <img src="{{ url_for('download_negative_frequency_graph') }}" alt="Negative Frequency Graph">
+        <form action="{{ url_for('download_negative_frequency_graph') }}" method="get">
+            <button type="submit">Download Frequency Graph Image</button>
+        </form>
+    </div>
 </body>
 </html>

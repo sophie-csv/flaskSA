@@ -40,16 +40,65 @@ def upload():
             save_location = os.path.join('input', new_filename)
             file.save(save_location)
 
-            type_selected = request.form.get('type')
-            if type_selected == 'ABSA':
-                output_file = process_aspect_csv(save_location)
-                return redirect(url_for('aspect_download'))
-            elif type_selected == 'Basic':
-                output_file = process_csv(save_location)
-            #return send_from_directory('output', output_file)
-                return redirect(url_for('download'))
+            # type_selected = request.form.get('type')
+            # if type_selected == 'ABSA':
+            output_file_aspect = process_aspect_csv(save_location)
+            output_file_regular = process_csv(save_location)
+            #     return redirect(url_for('aspect_download'))
+            # elif type_selected == 'Basic':
+            # #return send_from_directory('output', output_file)
+            #     return redirect(url_for('download'))
 
+            return redirect(url_for('view_page'))
     return render_template('upload.html')
+
+aspects = {
+    "food": ["food", "taste", "flavor", "fries", "burger", "mac", "cheese", "salmon", "veggies", "chips", 
+             "prepared", "pastry", "bread", "dessert", "meal", "dish", "menu", "portion", "delicious", 
+             "fresh", "horrible", "old", "runny", "rosemary"],
+    "service": ["service", "staff", "waiter", "waitress", "host", "manager", "employee", "friendly", 
+                "courteous", "dedicated", "Amanda", "Jen", "seated", "kind", "treat", "welcome", 
+                "helpful", "attentive", "slow", "rude"],
+    "ambience": ["ambience", "atmosphere", "decor", "environment", "setting", "comfortable", 
+                 "cozy", "noisy", "quiet", "clean", "music", "place", "vibe", "feel", "space"],
+    "price": ["price", "cost", "expensive", "cheap", "value", "worth", "overpriced", "affordable", 
+              "reasonable", "portion", "deal", "charges", "pricing"]
+}
+
+global density_file
+@app.route("/content/<tab>")
+def load_tab_content(tab):
+    if tab == "aspect_download":
+        global density_file
+        density_file = density_plot()  # Call function from custom.py
+        boxplot_file = box_plot()  # Call function from custom.py
+        correlation_file = correlation()
+        wordcloud_files = [f for f in os.listdir('wordclouds')]
+        return render_template("aspect_download.html", 
+                           density_file=density_file, 
+                           boxplot_file=boxplot_file, 
+                           correlation_file=correlation_file,
+                           aspects=aspects,
+                           wordcloud_files=wordcloud_files)
+
+    elif tab == "download":
+        return send_from_directory("templates", "download.html")
+    else:
+        return "<p>Content not found.</p>"
+    
+@app.route('/output/<filename>')
+def serve_plot(filename):
+    return send_from_directory('output', filename)
+
+@app.route('/wordclouds/<filename>')
+def serve_wordcloud(filename):
+    # Serve the wordcloud image from the wordclouds directory
+    return send_from_directory('wordclouds', filename)
+
+@app.route("/view")
+def view_page():
+    return render_template("view.html")
+
 
 import zipfile
 from flask import send_file
@@ -76,8 +125,7 @@ def aspect_download():
 
 @app.route('/aspect_download/density')
 def plot_density():
-    density = density_plot()
-    return send_from_directory('output', density, as_attachment=True)
+    return send_from_directory('output', density_file,  as_attachment=True)
 
 @app.route('/aspect_download/boxplot')
 def plot_boxplot():
@@ -111,7 +159,7 @@ def plot_wordcloud(aspect_type, wordcloud_type):
     if filename:
         return send_from_directory('wordclouds', filename, as_attachment=True)
     else:
-        return "File not found for the given aspect and wordcloud type.", 404
+        return None
 
 
 # <---------------- ABSA ROUTES --------------------->

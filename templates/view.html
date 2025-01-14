@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Tabs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .tab {
+      overflow: hidden;
+      background-color: #f1f1f1;
+    }
+
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    .tab button.active {
+      background-color: #ccc;
+    }
+
+    .tabcontent {
+      margin-top: 10px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dynamic Tabs Example</h1>
+
+  <!-- Tab Navigation -->
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'aspect_download')">Aspect Download</button>
+    <button class="tablinks" onclick="openTab(event, 'download')">Download</button>
+  </div>
+
+  <!-- Tab Content -->
+  <div id="tabcontent" class="tabcontent">
+    <p>Select a tab to load its content.</p>
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      // Mark all buttons as inactive
+      const tablinks = document.getElementsByClassName("tablinks");
+      for (let i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Mark the clicked button as active
+      evt.currentTarget.className += " active";
+
+      // Load the content dynamically from Flask
+      fetch(`/content/${tabName}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to load content for ${tabName}`);
+          }
+          return response.text();
+        })
+        .then(html => {
+          document.getElementById("tabcontent").innerHTML = html;
+        })
+        .catch(error => {
+          document.getElementById("tabcontent").innerHTML = `<p>Error: ${error.message}</p>`;
+        });
+    }
+
+    // Automatically load the first tab on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelector(".tablinks").click();
+    });
+  </script>
+</body>
+</html>

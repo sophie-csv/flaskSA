@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from textblob import TextBlob
 import os
-
+file = ''
 
 # Pre-Defined
 aspects = {
@@ -213,6 +213,7 @@ def generate_wordcloud(words, title, colormap):
         plt.imshow(wc, interpolation="bilinear")
         plt.title(title)
         plt.axis("off")
+    return None
 
 def wordclouds():
     global file
@@ -248,23 +249,26 @@ def wordclouds():
             if isinstance(text, str)  # Add this check to ensure text is a string
             for word in text.split()
         )
+        
 
         # Generate positive word cloud
-        generate_wordcloud(positive_words, f"Positive Word Cloud for {aspect.capitalize()}", 'Blues')
-        pos_file = f"{base_name}_positive_wordcloud_{aspect}.png"
-        image_path_pos = os.path.join('wordclouds', pos_file)
-        plt.savefig(image_path_pos)
-        plt.close()
+        if len(positive_words) > 0:
+            generate_wordcloud(positive_words, f"Positive Word Cloud for {aspect.capitalize()}", 'Blues')
+            pos_file = f"{base_name}_positive_wordcloud_{aspect}.png"
+            image_path_pos = os.path.join('wordclouds', pos_file)
+            plt.savefig(image_path_pos)
+            plt.close()
+            pos_files.append(pos_file)
 
         # Generate negative word cloud
-        generate_wordcloud(negative_words, f"Negative Word Cloud for {aspect.capitalize()}", 'Reds')
-        neg_file = f"{base_name}_negative_wordcloud_{aspect}.png"
-        image_path_neg = os.path.join('wordclouds', neg_file)
-        plt.savefig(image_path_neg)
-        plt.close()
+        if len(negative_words) > 0:
+            generate_wordcloud(negative_words, f"Negative Word Cloud for {aspect.capitalize()}", 'Reds')
+            neg_file = f"{base_name}_negative_wordcloud_{aspect}.png"
+            image_path_neg = os.path.join('wordclouds', neg_file)
+            plt.savefig(image_path_neg)
+            plt.close()
 
-        # Store the filenames
-        pos_files.append(pos_file)
-        neg_files.append(neg_file)
+            # Store the filenames
+            neg_files.append(neg_file)
 
     return pos_files, neg_files
