@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 from regular import process_csv, positive_word_cloud, negative_word_cloud, positive_frequency_graph, negative_frequency_graph
 from custom import process_aspect_csv, density_plot, box_plot, correlation, wordclouds
+import pandas as pd
 app = Flask(__name__)
 
 aspects = {
@@ -35,6 +36,14 @@ def upload():
     if request.method == 'POST':
         file = request.files['file']
         if file and allowed_file(file.filename):
+            file.seek(0)
+            # Read the file into a DataFrame
+            df = pd.read_csv(file)
+            file.seek(0)
+            # # Check if 'review' column exists
+            if "review" not in df.columns:
+                return render_template("upload.html", error="The CSV file must contain a 'review' column.")
+    
             filename = secure_filename(file.filename)
             new_filename = f'{filename.split(".")[0]}_{str(datetime.now().date())}.csv'
             save_location = os.path.join('input', new_filename)
