@@ -6,32 +6,38 @@
   <title>Dynamic Tabs</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Calibri', sans-serif;
+      background: linear-gradient(135deg, #212f3f 0%, #6db7ac 99%, #212f3f 100%);
       margin: 20px;
     }
 
+    h1, h2, h3 {
+            font-family: 'Calibri', sans-serif;
+            text-align: center;
+            color: #ffffff;
+        }
+
     .tab {
       overflow: hidden;
-      background-color: #f1f1f1;
+      background-color: hsl(0, 0%, 100%);
     }
 
     .tab button {
-      background-color: inherit;
+      background-color: #c02126;
       float: left;
       border: none;
       outline: none;
       cursor: pointer;
       padding: 14px 16px;
-      transition: 0.3s;
       font-size: 17px;
     }
 
     .tab button:hover {
-      background-color: #ddd;
+      background-color: #c02126;
     }
 
     .tab button.active {
-      background-color: #ccc;
+      background-color: #c02126;
     }
 
     .tabcontent {
@@ -43,12 +49,12 @@
   </style>
 </head>
 <body>
-  <h1>Dynamic Tabs Example</h1>
+  <h1 style="color: #ffffff; font-size: 4em;">SENTIMENT ANALYSIS</h1>
 
   <!-- Tab Navigation -->
   <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'aspect_download')">Aspect Download</button>
-    <button class="tablinks" onclick="openTab(event, 'download')">Download</button>
+    <button class="tablinks" onclick="openTab(event, 'aspect_download')">Aspect-Based</button>
+    <button class="tablinks" onclick="openTab(event, 'download')">Basic</button>
   </div>
 
   <!-- Tab Content -->

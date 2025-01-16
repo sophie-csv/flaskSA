@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #212f3f;
             margin: 0;
             padding: 0;
             display: flex;
@@ -27,13 +27,14 @@
         }
 
         h1, h2, h3 {
+            font-family: 'Calibri', sans-serif;
             text-align: center;
-            color: #333333;
+            color: #000000;
         }
 
         hr {
             border: none;
-            border-top: 1px solid #cccccc;
+            border-top: 1px solid #212f3f;
             margin: 20px 0;
         }
 
@@ -42,8 +43,8 @@
             margin: 20px auto;
             max-width: 100%;
             height: auto;
-            border: 1px solid #dddddd;
-            border-radius: 8px;
+            border: 1px solid #ffffff;
+            border-radius: 3px;
         }
 
         form, button {
@@ -51,7 +52,7 @@
         }
 
         button {
-            background-color: #007BFF;
+            background-color: #c02126;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -62,7 +63,8 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #c02126;
+            transform: scale(1.05);
         }
 
         ul {
@@ -82,15 +84,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>Successfully Uploaded!</h1>
+        <h1>Aspect-Based Sentiment Analysis<h1>
+        <h3 style='text-align: left;'><strong>What is aspect-based sentiment analysis?</strong></h3>
+        <p>Aspect-based sentiment analysis looks at specific parts (aspects) of a topic to understand what people like or dislike about each one. For restaurants, this can reveal opinions on food quality, service, ambiance, and price, helping identify what customers value most and where improvements can be made.</p>
         <h3>Here is the file with sentiment values attached:</h3>
-
+        <hr>
         <!-- Density Plot Section -->
         <h3>Density Plot</h3>
         <img src="{{ url_for('serve_plot', filename=density_file) }}" alt="Density Plot">
         <form action="{{ url_for('plot_density') }}" method="get">
             <button type="submit">Download Density Plot</button>
         </form>
+        <h3 style='text-align: left;'><strong> What does this mean?</strong></h3>
+        <p>The "Density of the Compound Sentiment Scores by Aspect" graph displays the distribution of sentiment/polarity scores (-1 for negative and 1 for positive) for specific aspects of a topic and how often it appears within the dataset. The y-axis shows the density, indicating how often sentiment scores appear, while the x-axis represents the compound sentiment score, ranging from positive to negative. This graph helps visualize which aspects are more positively or negatively discussed and how frequently those sentiments occur.</p>
         <hr>
 
         <!-- Box Plot Section -->
