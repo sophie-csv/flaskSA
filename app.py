@@ -74,11 +74,9 @@ aspects = {
               "reasonable", "portion", "deal", "charges", "pricing"]
 }
 
-global density_file
 @app.route("/content/<tab>")
 def load_tab_content(tab):
     if tab == "aspect_download":
-        global density_file
         density_file = density_plot()  # Call function from custom.py
         boxplot_file = box_plot()  # Call function from custom.py
         correlation_file = correlation()
@@ -91,7 +89,15 @@ def load_tab_content(tab):
                            wordcloud_files=wordcloud_files)
 
     elif tab == "download":
-        return send_from_directory("templates", "download.html")
+        pos_wc_file = positive_word_cloud()
+        neg_wc_file = negative_word_cloud()
+        pos_freq_file = positive_frequency_graph()
+        neg_freq_file = negative_frequency_graph()
+        return render_template("download.html", 
+                               pos_wc_file=pos_wc_file,
+                               neg_wc_file=neg_wc_file,
+                               pos_freq_file=pos_freq_file, 
+                               neg_freq_file=neg_freq_file)
     else:
         return "<p>Content not found.</p>"
     
@@ -134,6 +140,7 @@ def aspect_download():
 
 @app.route('/aspect_download/density')
 def plot_density():
+    density_file = density_plot()
     return send_from_directory('output', density_file,  as_attachment=True)
 
 @app.route('/aspect_download/boxplot')
@@ -215,8 +222,8 @@ def download_positive_frequency_graph():
 
 @app.route('/download/negative_frequency_graph')
 def download_negative_frequency_graph():
-    pfg = negative_frequency_graph()
-    return send_from_directory('output', pfg, as_attachment=True)
+    nfg = negative_frequency_graph()
+    return send_from_directory('output', nfg, as_attachment=True)
 
 
 # ONLY WORKS WHEN YOU TERMINATE WITH CONTROL + C 

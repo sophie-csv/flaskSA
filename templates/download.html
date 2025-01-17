@@ -84,13 +84,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Successfully Uploaded!</h1>
+        <h1>Basic Sentiment Analysis</h1>
         <h3>Here is the file with sentiment values attached:</h3>
-
-        <!-- Dynamically render list of files -->
-        {% for filename in files %}
-            <a href="{{ url_for('download_file', filename=filename) }}" download>{{ filename }}</a><br />
-        {% endfor %}
 
         <hr>
 
@@ -102,7 +97,7 @@
         <hr>
 
         <h1>Download the Positive Sentiment WordCloud</h1>
-        <img src="{{ url_for('download_positive_word_cloud') }}" alt="Positive Sentiment Word Cloud">
+        <img src="{{ url_for('serve_plot', filename=pos_wc_file) }}" alt="Positive Sentiment Word Cloud">
         <form action="{{ url_for('download_positive_word_cloud') }}" method="get">
             <button type="submit">Download WordCloud Image</button>
         </form>
@@ -110,7 +105,7 @@
         <hr>
 
         <h1>Download the Negative Sentiment WordCloud</h1>
-        <img src="{{ url_for('download_negative_word_cloud') }}" alt="Negative Sentiment Word Cloud">
+        <img src="{{ url_for('serve_plot', filename=neg_wc_file) }}" alt="Negative Sentiment Word Cloud">
         <form action="{{ url_for('download_negative_word_cloud') }}" method="get">
             <button type="submit">Download WordCloud Image</button>
         </form>
@@ -118,7 +113,7 @@
         <hr>
 
         <h1>Download the Positive Frequency Graph</h1>
-        <img src="{{ url_for('download_positive_frequency_graph') }}" alt="Positive Frequency Graph">
+        <img src="{{ url_for('serve_plot', filename=pos_freq_file) }}" alt="Positive Frequency Graph">
         <form action="{{ url_for('download_positive_frequency_graph') }}" method="get">
             <button type="submit">Download Frequency Graph Image</button>
         </form>
@@ -126,7 +121,7 @@
         <hr>
 
         <h1>Download the Negative Frequency Graph</h1>
-        <img src="{{ url_for('download_negative_frequency_graph') }}" alt="Negative Frequency Graph">
+        <img src="{{ url_for('serve_plot', filename=neg_freq_file) }}" alt="Negative Frequency Graph">
         <form action="{{ url_for('download_negative_frequency_graph') }}" method="get">
             <button type="submit">Download Frequency Graph Image</button>
         </form>

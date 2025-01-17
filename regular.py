@@ -4,7 +4,7 @@ from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
 from collections import Counter
-regular_file = ''
+global regular_file
 
 def process_csv(filename):
     global regular_file
@@ -79,10 +79,10 @@ matplotlib.use('Agg')
 from wordcloud import WordCloud
 
 def positive_word_cloud():
-    global file
-    base_name = os.path.splitext(os.path.basename(file))[0]
+    global regular_file
+    base_name = os.path.splitext(os.path.basename(regular_file))[0]
     new_file_name = f"{base_name}_positive_wordcloud.png"
-    data = pd.read_csv(file)
+    data = pd.read_csv(regular_file)
     
     positive = data[data['overall_sentiment'] == 'positive']
     positive_text = ' '.join(positive['review'].tolist())
@@ -93,7 +93,6 @@ def positive_word_cloud():
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.title('Positive Sentiment Reviews Word Cloud', fontsize=20,fontweight='bold')
-    plt.show()
 
     wordcloud_image_path = os.path.join('output', new_file_name)
     plt.savefig(wordcloud_image_path)
@@ -102,10 +101,10 @@ def positive_word_cloud():
     return new_file_name
 
 def positive_frequency_graph():
-    global file
-    base_name = os.path.splitext(os.path.basename(file))[0]
+    global regular_file
+    base_name = os.path.splitext(os.path.basename(regular_file))[0]
     new_file_name = f"{base_name}_positive_frequency_graph.png"
-    data = pd.read_csv(file)
+    data = pd.read_csv(regular_file)
 
     positive = data[data['overall_sentiment'] == 'positive']
     positive_text = ' '.join(positive['review'].tolist())
@@ -128,7 +127,6 @@ def positive_frequency_graph():
     #add the frequency on top of each bar
     for i, freq in enumerate(df_word_freq.head(20)['Frequency']):
         ax.text(i, freq, str(freq), ha='center', va='bottom')
-    plt.show()
 
     image_path = os.path.join('output', new_file_name)
     plt.savefig(image_path)
@@ -136,10 +134,10 @@ def positive_frequency_graph():
     return new_file_name
 
 def negative_word_cloud():
-    global file
-    base_name = os.path.splitext(os.path.basename(file))[0]
+    global regular_file
+    base_name = os.path.splitext(os.path.basename(regular_file))[0]
     new_file_name = f"{base_name}_negative_wordcloud.png"
-    data = pd.read_csv(file)
+    data = pd.read_csv(regular_file)
 
     negative = data[data['overall_sentiment'] == 'negative']
     negative_text = ' '.join(negative['review'].tolist())
@@ -149,7 +147,6 @@ def negative_word_cloud():
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.title('Negative Sentiment Reviews Word Cloud', fontsize=20,fontweight='bold')
-    plt.show()
 
     
     wordcloud_image_path = os.path.join('output', new_file_name)
@@ -159,10 +156,10 @@ def negative_word_cloud():
     return new_file_name
 
 def negative_frequency_graph():
-    global file
-    base_name = os.path.splitext(os.path.basename(file))[0]
+    global regular_file
+    base_name = os.path.splitext(os.path.basename(regular_file))[0]
     new_file_name = f"{base_name}_negative_frequency_graph.png"
-    data = pd.read_csv(file)
+    data = pd.read_csv(regular_file)
 
     negative = data[data['overall_sentiment'] == 'negative']
     negative_text = ' '.join(negative['review'].tolist())
@@ -185,7 +182,6 @@ def negative_frequency_graph():
     #add the frequency on top of each bar
     for i, freq in enumerate(df_word_freq.head(20)['Frequency']):
         ax.text(i, freq, str(freq), ha='center', va='bottom')
-    plt.show()
 
     image_path = os.path.join('output', new_file_name)
     plt.savefig(image_path)
