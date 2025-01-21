@@ -8,6 +8,8 @@ from custom import process_aspect_csv, density_plot, box_plot, correlation, word
 import pandas as pd
 app = Flask(__name__)
 
+filename =''
+
 aspects = {
     "food": ["food", "taste", "flavor", "fries", "burger", "mac", "cheese", "salmon", "veggies", "chips", 
              "prepared", "pastry", "bread", "dessert", "meal", "dish", "menu", "portion", "delicious", 
@@ -43,7 +45,6 @@ def upload():
             # # Check if 'review' column exists
             if "review" not in df.columns:
                 return render_template("upload.html", error="The CSV file must contain a 'review' column.")
-    
             filename = secure_filename(file.filename)
             new_filename = f'{filename.split(".")[0]}_{str(datetime.now().date())}.csv'
             save_location = os.path.join('input', new_filename)
@@ -80,6 +81,7 @@ def load_tab_content(tab):
         density_file = density_plot()  # Call function from custom.py
         boxplot_file = box_plot()  # Call function from custom.py
         correlation_file = correlation()
+        pos_files, neg_files = wordclouds()
         wordcloud_files = [f for f in os.listdir('wordclouds')]
         return render_template("aspect_download.html", 
                            density_file=density_file, 
@@ -108,7 +110,7 @@ def serve_plot(filename):
 @app.route('/wordclouds/<filename>')
 def serve_wordcloud(filename):
     # Serve the wordcloud image from the wordclouds directory
-    return send_from_directory('wordclouds', filename)
+    return send_from_directory('wordclouds', filename, as_attachment=True)
 
 @app.route("/view")
 def view_page():
@@ -183,8 +185,10 @@ def plot_wordcloud(aspect_type, wordcloud_type):
 
 @app.route('/download_all')
 def download_all():
+    global filename
     # Name of the zip file
-    zip_filename = 'output_files.zip'
+    base_name = os.path.splitext(os.path.basename(filename))[0]
+    zip_filename = f"{base_name}.zip"
     zip_filepath = os.path.join('zip_file', zip_filename)
     
     # Create a zip file containing all files from the 'output' directory

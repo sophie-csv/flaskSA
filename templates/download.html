@@ -85,45 +85,51 @@
 <body>
     <div class="container">
         <h1>Basic Sentiment Analysis</h1>
-        <h3>Here is the file with sentiment values attached:</h3>
-
+        <hr>
+        <h3 style='text-align: left;'><strong>What is aspect-based sentiment analysis?</strong></h3>
+        <p>Basic sentiment analysis is the process of determining the emotional tone or sentiment expressed in a piece of text. It typically classifies the text into categories such as positive, negative, or neutral, based on the words or phrases used. This analysis helps to understand the overall sentiment conveyed in customer reviews, social media posts, or other written content.</p>
         <hr>
 
-        <h1>Download All Files</h1>
-        <form action="{{ url_for('download_all') }}" method="get">
-            <button type="submit">Download All Files</button>
-        </form>
-
-        <hr>
-
-        <h1>Download the Positive Sentiment WordCloud</h1>
+        <h2>Positive Sentiment WordCloud</h2>
         <img src="{{ url_for('serve_plot', filename=pos_wc_file) }}" alt="Positive Sentiment Word Cloud">
         <form action="{{ url_for('download_positive_word_cloud') }}" method="get">
             <button type="submit">Download WordCloud Image</button>
         </form>
+        <h3 style='text-align: left;'><strong>What does this mean?</strong></h3>
+        <p>A simple general positive word cloud displays positive words like "happy" or "great," with larger words appearing more frequently. The size of the words indicates how often they appear, giving a quick visual of the overall positive sentiment.</p>
         
         <hr>
 
-        <h1>Download the Negative Sentiment WordCloud</h1>
+        <h2>Negative Sentiment WordCloud</h2>
         <img src="{{ url_for('serve_plot', filename=neg_wc_file) }}" alt="Negative Sentiment Word Cloud">
         <form action="{{ url_for('download_negative_word_cloud') }}" method="get">
             <button type="submit">Download WordCloud Image</button>
         </form>
+        <h3 style='text-align: left;'><strong>What does this mean?</strong></h3>
+        <p>A simple general negative word cloud shows negative words like "sad" or "bad," with larger words appearing more frequently. The size of the words reflects their frequency, providing a quick visual of the overall negative sentiment.</p>
 
         <hr>
 
-        <h1>Download the Positive Frequency Graph</h1>
+        <h2>Positive Frequency Graph</h2>
         <img src="{{ url_for('serve_plot', filename=pos_freq_file) }}" alt="Positive Frequency Graph">
         <form action="{{ url_for('download_positive_frequency_graph') }}" method="get">
             <button type="submit">Download Frequency Graph Image</button>
         </form>
-
+        <h3 style='text-align: left;'><strong>What does this mean?</strong></h3>
+        <p>A Positive Frequency Graph shows how often positive words or sentiments appear in a dataset. The x-axis represents individual positive words or time intervals, while the y-axis indicates the frequency of each word or sentiment. This graph visually represents the distribution and intensity of positive expressions throughout the data.</p>
         <hr>
 
-        <h1>Download the Negative Frequency Graph</h1>
+        <h2>Negative Frequency Graph</h2>
         <img src="{{ url_for('serve_plot', filename=neg_freq_file) }}" alt="Negative Frequency Graph">
         <form action="{{ url_for('download_negative_frequency_graph') }}" method="get">
             <button type="submit">Download Frequency Graph Image</button>
+        </form>
+        <h3 style='text-align: left;'><strong>What does this mean?</strong></h3>
+        <p>A Negative Frequency Graph shows how often negative words or sentiments appear in a dataset. The x-axis represents individual negative words or time intervals, while the y-axis indicates the frequency of each word or sentiment. This graph visually represents the distribution and intensity of negative expressions throughout the data.</p>
+        <hr>
+        
+        <form action="{{ url_for('download_all') }}" method="get">
+            <button type="submit" style="padding: 10px 20px; font-size: 2em;">Download All Files</button>
         </form>
     </div>
 </body>

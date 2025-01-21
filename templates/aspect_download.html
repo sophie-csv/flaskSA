@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Files</title>
+    <title>Sentiment Analysis</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,56 +85,87 @@
 <body>
     <div class="container">
         <h1>Aspect-Based Sentiment Analysis<h1>
-        <h3>Here is the file with sentiment values attached:</h3>
         <hr>
-        
+
         <h3 style='text-align: left;'><strong>What is aspect-based sentiment analysis?</strong></h3>
         <p>Aspect-based sentiment analysis looks at specific parts (aspects) of a topic to understand what people like or dislike about each one. For restaurants, this can reveal opinions on food quality, service, ambiance, and price, helping identify what customers value most and where improvements can be made.</p>
-        <h3>Here is the file with sentiment values attached:</h3>
+        
         <hr>
         <!-- Density Plot Section -->
-        <h3>Density Plot</h3>
+        <h2>Density Plot</h2>
         <img src="{{ url_for('serve_plot', filename=density_file) }}" alt="Density Plot">
         <form action="{{ url_for('plot_density') }}" method="get">
             <button type="submit">Download Density Plot</button>
         </form>
         <h3 style='text-align: left;'><strong> What does this mean?</strong></h3>
-        <p>The "Density of the Compound Sentiment Scores by Aspect" graph displays the distribution of sentiment/polarity scores (-1 for negative and 1 for positive) for specific aspects of a topic and how often it appears within the dataset. The y-axis shows the density, indicating how often sentiment scores appear, while the x-axis represents the compound sentiment score, ranging from positive to negative. This graph helps visualize which aspects are more positively or negatively discussed and how frequently those sentiments occur.</p>
+        <p>The "Density of the Compound Sentiment Scores by Aspect" graph displays the distribution of sentiment/polarity scores (score of overall sentiment of a piece of text) for specific aspects of a topic and how often it appears within the dataset. The y-axis shows the density, indicating how often sentiment scores appear, while the x-axis represents the compound sentiment score, ranging from positive to negative. This graph helps visualize which aspects are more positively or negatively discussed and how frequently those sentiments occur.</p>
         <hr>
 
         <!-- Box Plot Section -->
-        <h3>Sentiment Distribution Box Plot</h3>
+        <h2>Sentiment Distribution Box Plot</h2>
         <img src="{{ url_for('serve_plot', filename=boxplot_file) }}" alt="Sentiment Distribution Box Plot">
         <form action="{{ url_for('plot_boxplot') }}" method="get">
             <button type="submit">Download Box Plot</button>
         </form>
+        <h3 style='text-align: left;'><strong> What does this mean?</strong></h3>
+        <p>
+            
+The "Sentiment Score Distribution By Aspect" graph shows the relationship between compound scores (overall sentiment) and aspects, visualizing the spread of sentiment across different aspects. It displays the median, interquartile range (IQR), and outliers, allowing comparisons of sentiment variation. The plot reveals insights into the central tendency, variability, and skewness of sentiment for each aspect.</p>
 
         <hr>
 
         <!-- Correlational Plot Section -->
-        <h3>Sentiment Distribution Correlational Plot</h3>
+        <h2>Sentiment Distribution Correlational Plot</h2>
         <img src="{{ url_for('serve_plot', filename=correlation_file) }}" alt="Sentiment Distribution Correlational Plot">
         <form action="{{ url_for('plot_correlational') }}" method="get">
             <button type="submit">Download Correlational Plot</button>
         </form>
+        <h3 style='text-align: left;'><strong> What does this mean?</strong></h3>
+        <p>This "Correlation Between Word Count and Compound Sentiment" graph shows how sentiment correlates with text length. A positive correlation means longer texts tend to have more positive sentiment, while a negative correlation suggests longer texts are more negative. This analysis helps reveal if text length influences sentiment intensity.</p>
 
         <hr>
 
-<h2>Wordclouds</h2>
-<ul>
-    {% for filename in wordcloud_files %}
-        {% set aspect = filename.split('_')[-1].split('.')[0] %}
-        <li>
-            <h1>{{ aspect.capitalize() }}</h1>
-            <img src="{{ url_for('serve_wordcloud', filename=filename) }}" alt="{{ filename }}" width="300">
-            <br>
-            <a href="{{ url_for('serve_wordcloud', filename=filename) }}" download="{{ filename }}">
-                Download {{ filename }}
-            </a>
-        </li>
-    {% endfor %}
-</ul>
+        <h2>Wordclouds</h2>
+        <ul>
+        {% set grouped_wordclouds = {} %}
+        {% for filename in wordcloud_files %}
+            {% set aspect = filename.split('_')[-1].split('.')[0] %}
+            {% if aspect not in grouped_wordclouds %}
+                {% set _ = grouped_wordclouds.update({aspect: []}) %}
+            {% endif %}
+            {% set _ = grouped_wordclouds[aspect].append(filename) %}
+        {% endfor %}
+
+        <div>
+            {% for aspect, files in grouped_wordclouds.items() %}
+                <div style="margin-bottom: 20px;">
+                    <h3 style="text-align: center;">{{ aspect.capitalize() }}</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(390px, 1fr)); gap: 10px; justify-items: center; align-items: center;">
+                        {% for filename in files %}
+                            <div style="text-align: center;">
+                                <img src="{{ url_for('serve_wordcloud', filename=filename) }}" alt="{{ filename }}" width="600">
+                                <br>
+                                <form action="{{ url_for('serve_wordcloud', filename=filename) }}" method="get">
+                                    <button type="submit">
+                                        Download
+                                    </button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        
+            </ul>
+        <h3 style='text-align: left;'><strong>What does this mean?</strong></h3>
+        <p>A word cloud by aspect displays the most frequently occurring words associated with different aspects of a text, with the larger and darker the word, the more frequently it appears. Larger and darker words indicate higher frequency, making it easy to identify dominant terms for each aspect. This visualization helps highlight key themes or topics by showing the most prominent words in a visually impactful way.</p>
+        <hr>
+        <form action="{{ url_for('download_all') }}" method="get">
+            <button type="submit" style="padding: 10px 20px; font-size: 2em;">Download All Files</button>
+        </form>
 
     </div>
+    
 </body>
 </html>
